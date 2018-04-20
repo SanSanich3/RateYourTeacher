@@ -14,5 +14,8 @@ The teaching staff is the main and most valuable resource of the higher educatio
 - university staff.
 
 ## Credits
-- Illia Ovcharenko, links (<https://github.com/ElijahOvcharenko>)
-- Aleksandr Khovanskiy, links (<https://github.com/SanSanich3>)
+- Illia Ovcharenko, links (<https://github.com/ElijahOvcharenko>);
+- Aleksandr Khovanskiy, links (<https://github.com/SanSanich3>);
+- Shipova Violetta;
+- Anna Smykova;
+- Daniel Pilipets.
