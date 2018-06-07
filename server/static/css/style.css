@@ -1,0 +1,241 @@
+
+html,body {
+    height: 100%;
+    margin: 0;
+}
+body {
+    margin: 0 ;
+    color: #000 ;
+    min-width: 320px ;
+    font: 14px/17px 'pt_sansregular' , tahoma, geneva, sans-serif ;
+    background: #fff ;
+    -webkit-text-size-adjust: 100% ;
+}
+/* General reset */
+form, fieldset {
+    margin: 0;
+    padding: 0;
+    border-style: none;
+}
+img {
+    border-style: none;
+    vertical-align:top;
+}
+ul li{vertical-align:top;}
+input, select, textarea {
+    vertical-align: middle;
+    font: 14px/18px 'pt_sansregular' , tahoma, geneva, sans-serif ;
+}
+a {
+    color: #0d73df ;
+    text-decoration: underline;
+}
+a:hover {text-decoration: none;}
+
+a[href^="tel"],
+a[href^="tel"]:hover {
+    color: #000 ;
+    cursor: default;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {display:block;}
+figure{margin:0;}
+
+button::-moz-focus-inner {
+    padding:0;
+    border:0;
+}
+a:focus,
+a:hover {
+    outline: none;
+    outline: 0;
+}
+.rub {
+    text-transform:none;
+    font-style:normal;
+    font-family:'als_rublregular';
+    position:static !important;
+    float:none !important;
+    display:inline !important;
+    background:none !important;
+    font-size: 20px ;
+    line-height: 22px ;
+}
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+.main-wrapper .btn{
+    background-color: #ffffff;
+    box-shadow: 5px 5px 10px #00000077;
+}
+
+.main-wrapper{
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+
+
+/* wrapper */
+#wrapper {
+    overflow:hidden;
+    width: 100%;
+    min-height: 100%;
+}
+.w1 {padding-bottom: 245px;}
+/* header */
+#header {
+    overflow:hidden;
+    width: 100% ;
+}
+#header .logo {
+    float: left;
+    overflow: hidden;
+    text-indent: -9999px;
+    margin:0;
+}
+#header .logo a,
+#header .logo span {
+    display:block;
+}
+
+/* main */
+#main:before{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(1,1,1, .6);
+    z-index: -1;
+}
+#main {
+    z-index: 1;
+    position: relative;
+    overflow:hidden;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('http://nure.ua/wp-content/uploads/Main_Img_department/slide-img2.png') no-repeat center / cover;
+}
+
+.wrap{
+    max-width: 1180px ;
+    margin: 0 auto ;
+    padding: 0 40px ;
+}
+#main button.btn.btn-outline-success.my-2.my-sm-0:hover {
+    background-color: #28a745;
+}
+.topWrapper .title{
+    margin-bottom: 20px;
+}
+.topWrapper strong{
+    font-size: 36px;
+    line-height: 40px;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    padding-bottom: 20px;
+}
+.topWrapper .table thead th{
+    border-top: none;
+}
+.topWrapper .table{
+    background: #fff;
+    border-radius: 5px;
+    -webkit-box-shadow: 5px 5px 10px rgba(0,0,0, .3);
+    -moz-box-shadow: 5px 5px 10px rgba(0,0,0, .3);
+    box-shadow: 5px 5px 10px rgba(0,0,0, .3);
+}
+/* footer */
+#footer p{
+    margin: 0;
+}
+#footer {
+    overflow:hidden;
+    width:100%;
+    padding:20px ;
+    position:relative;
+}
+
+
+
+
+/* placeholder input*/
+input:-moz-placeholder {
+    color:#000;
+    opacity:1;
+}
+input::-moz-placeholder {
+    color:#000;
+    opacity:1;
+}
+input::-webkit-input-placeholder {color:#000;}
+input:-ms-input-placeholder {color: #000 ;}
+/* input:focus placeholder */
+input:focus:-moz-placeholder {
+    color:#000;
+    opacity:1;
+}
+input:focus::-moz-placeholder {
+    color:#000;
+    opacity:1;
+}
+input:focus::-webkit-input-placeholder {color:#000;}
+input:focus:-ms-input-placeholder {color: #000 ;}
+/* placeholder  textarea*/
+textarea:-moz-placeholder {
+    color:#000;
+    opacity:1;
+}
+textarea::-moz-placeholder {
+    color:#000;
+    opacity:1;
+}
+textarea::-webkit-input-placeholder {color:#000;}
+textarea:-ms-input-placeholder {color: #000 ;}
+/*  textarea:focus placeholder */
+textarea:focus:-moz-placeholder {
+    color:#000;
+    opacity:1;
+}
+textarea:focus::-moz-placeholder {
+    color:#000;
+    opacity:1;
+}
+textarea:focus::-webkit-input-placeholder {color:#000;}
+textarea:focus:-ms-input-placeholder {color: #000 ;}
+
+
+/*   media  */
+@media (max-width: 767px){
+
+
+
+
+
+
+
+
+
+}
+
+
+
+

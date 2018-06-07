@@ -1,7 +1,11 @@
 import requests
+import sys
 import time
-import Time
 from urllib.request import urlopen
+
+import matplotlib
+matplotlib.use('Agg')
+
 from skimage.io import *
 from io import BytesIO
 
@@ -129,13 +133,11 @@ class Bot:
         self.offset = update['update_id'] + 1
 
     def run(self):
-        lecture = Time.Lecture()
         print("Bot is started")
         try:
             while True:
                 time.sleep(self.update_frequency)
-                # print("Current lecture num:", lecture.current_num)
-                self.check(lecture)
+                self.check()
                 request = self.get_updates()
                 # print("update...")
                 if request is None:
@@ -143,6 +145,7 @@ class Bot:
                 # print(request.json())
                 for update in request.json()['result']:
                     self.execute_update(update)
+                sys.stdout.flush()
 
         except KeyboardInterrupt:
             print("\nBot will come back!")

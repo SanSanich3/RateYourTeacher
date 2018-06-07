@@ -8,10 +8,12 @@ activation_error = "Упссс, что-то не так, попробуйте п
 vote_command = "голосование???"
 vote_request = "Как тебе лекция %s по %s? Пожалуйста, оцени от 1 до 10"
 
+current_lecture_num_command = "Сейчас %i пара"
+
 voting_no_such_username = "Ишь какой, голосовать удумал, а ты кто вообще?"
 voting_not_correct_vote_m_id = "Ну ты и жук, не твое это голосование"
 voting_late = "Опоздал ты, Вася"
 voting_nan = "уверн что это число?"
-voting_successful = "Спасибо за ваш голос, результаты этого перпода %s"
+voting_successful = "Спасибо за ваш голос, результаты этого препода %s"
 
 default_message = "понял принял"

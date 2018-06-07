@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "header.html" %}
+
+
+<main id="main">
+    <div class=" d-flex main-wrapper">
+        <div style="background: white">
+            <p>ФИО:{{ base_info['teacher_full_name'] }}</p>
+            <p>Рейтинг: {{ rating }}</p>
+            <p>Бонус: {{ bonus }} / {{ budget }} UAH</p>
+        </div>
+        <img src="/teacher/plot/{{ base_info['teacher_id'] }}" alt="изменение рейтинга">
+    </div>
+</main>
+
+
+{% include "footer.html" %}
+{% endblock %}

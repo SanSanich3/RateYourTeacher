@@ -1,8 +1,9 @@
 import csv
 from Cist import Cist
 from DataBase import DataBase
+from settings import *
 
-db = DataBase("rate_your_teacher")
+db = DataBase("rate_your_teacher", HOST, DATABASE_USER, DATABASE_USER_PASSWORD)
 
 
 group_full_name = "КН-ПЗПІ-16-4"

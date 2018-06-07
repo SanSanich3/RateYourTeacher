@@ -1,3 +1,4 @@
+from settings import *
 import requests
 import time
 import messages
@@ -8,11 +9,12 @@ from Bot import Bot
 
 class RateYourTeacherBot(Bot):
 
-    def __init__(self, token, database):
+    def __init__(self, token, database, lecture):
         super().__init__('https://api.telegram.org/bot',
                          token,
                          update_frequency=1)
         self.db = database
+        self.lecture = lecture
 
     def default_command(self, info):
         message = messages.default_command
@@ -61,69 +63,16 @@ class RateYourTeacherBot(Bot):
     def on_vote_command(self, info):
         self.send_message(info['chat']['id'], messages.vote_command)
 
-    def handle_current_lecture(self, lecture, teacher, subject, group_id):
-        """
-        Очень важно! Если у вас по расписанию сейчас две пары (например англ => 2 группы)
-        голосовать можно то за последнюю добовленную, потому что у каждого студента записан номер
-        последнего голосования в котором он участвовал(-ует)
-        """
-        select_teacher = """
-        SELECT * FROM Teacher
-        WHERE teacher_id = %i
-        """ % int(teacher['id'])
-        find_teacher = self.db.execute_select(select_teacher)
-        if len(find_teacher) == 0:
-            insert_teacher = """
-            INSERT INTO Teacher(teacher_full_name, teacher_short_name, teacher_id) 
-            VALUES ('%s', '%s', %i)
-            """ % (teacher['full_name'],  teacher['short_name'], int(teacher['id']))
-            result = self.db.execute_update_and_create(insert_teacher)
-            if not result:
-                print("WARNING, TEACHER NOT INSERTED")
-                return
+    def on_current_lecture_num_command(self, info):
+        self.send_message(info['chat']['id'],
+                          messages.current_lecture_num_command % self.lecture.current_num)
 
-        message = messages.vote_request % (teacher['short_name'], subject['brief'])
-
-        print("Create new vote")
-        insert_vote = """
-        INSERT INTO Vote( group_id, teacher_id, vote_mark_sum, 
-        vote_num_of_participants, vote_start_time)
-        VALUES (%i, %i, %i, %i, %i)
-        """ % (group_id, int(teacher['id']), 0, 0, int(time.time()))
-        result = self.db.execute_update_and_create(insert_vote)
-        if not result:
-            print("WARNING, VOTE NOT INSERTED")
-
-        select_students = """
-        SELECT * FROM Student
-        WHERE group_id = %i
-        """ % int(group_id)
-        students = self.db.execute_select(select_students)
-        for student in students:
-            if student['student_chat_id'] != -1:
-                response = self.send_message(student['student_chat_id'], message)
-                if requests is not None:
-                    response_json = response.json()
-                    vote_message_id = int(response_json['result']['message_id'])
-                    update_student = """
-                    UPDATE Student
-                    SET student_last_vote_id = LAST_INSERT_ID(), student_vote_message_id = %i
-                    WHERE student_id = %i
-                    """ % (vote_message_id, int(student['student_id']))
-                    result = self.db.execute_update_and_create(update_student)
-                    print("Result of adding voting to student: ", result)
-
-    def check(self, lecture):
-        if lecture.is_ended():
-            select_groups = """
-            SELECT * FROM rate_your_teacher.Group
-            """
-            groups = self.db.execute_select(select_groups)
-            for group in groups:
-                Cist.handle_current_lectures(int(group['group_id']), lecture.current_num,
-                                             self.handle_current_lecture)
-
-            lecture.next()
+    def on_log_command(self, info):
+        try:
+            with open("nohup.out", "r") as log:
+                self.send_message(info['chat']['id'], "<code>%s</code>" % log.read())
+        except (OSError, IOError):
+            self.send_message(info['chat']['id'], "Log file exception")
 
     def on_message_received(self, info):
         if 'reply_to_message' in info:
@@ -185,9 +134,79 @@ class RateYourTeacherBot(Bot):
             result = self.db.execute_update_and_create(update_student)
             if not result:
                 print("WARNING, STUDENT NOT UPDATED")
+
+            url = HOST + ':' + str(PORT) + '/teacher/' + str(vote['teacher_id'])
+            link = '<a href="%s"> ссылка </a>' % url
             self.send_message(info['chat']['id'],
-                              messages.voting_successful
-                              % vote['teacher_id'])
+                              messages.voting_successful % link)
 
         else:
             self.send_message(info['chat']['id'], messages.default_message)
+
+    def handle_current_lecture(self, lecture, teacher, subject, group_id):
+        """
+        Очень важно! Если у вас по расписанию сейчас две пары (например англ => 2 группы)
+        голосовать можно то за последнюю добовленную, потому что у каждого студента записан номер
+        последнего голосования в котором он участвовал(-ует)
+        """
+        select_teacher = """
+        SELECT * FROM Teacher
+        WHERE teacher_id = %i
+        """ % int(teacher['id'])
+        find_teacher = self.db.execute_select(select_teacher)
+        if len(find_teacher) == 0:
+            insert_teacher = """
+            INSERT INTO Teacher(teacher_full_name, teacher_short_name, teacher_id) 
+            VALUES ('%s', '%s', %i)
+            """ % (teacher['full_name'],  teacher['short_name'], int(teacher['id']))
+            result = self.db.execute_update_and_create(insert_teacher)
+            if not result:
+                print("WARNING, TEACHER NOT INSERTED")
+                return
+
+        message = messages.vote_request % (teacher['short_name'], subject['brief'])
+
+        db_connection = self.db.get_connection()
+        print("Create new vote")
+        insert_vote = """
+        INSERT INTO Vote( group_id, teacher_id, vote_mark_sum, 
+        vote_num_of_participants, vote_start_time)
+        VALUES (%i, %i, %i, %i, %i)
+        """ % (group_id, int(teacher['id']), 0, 0, int(time.time()))
+        result = self.db.execute_update_and_create_with_connection(insert_vote, db_connection)
+        if not result:
+            print("WARNING, VOTE NOT INSERTED")
+
+        select_students = """
+        SELECT * FROM Student
+        WHERE group_id = %i
+        """ % int(group_id)
+        students = self.db.execute_select_with_connection(select_students, db_connection)
+        for student in students:
+            if student['student_chat_id'] != -1:
+                response = self.send_message(student['student_chat_id'], message)
+                if requests is not None:
+                    response_json = response.json()
+                    vote_message_id = int(response_json['result']['message_id'])
+                    update_student = """
+                    UPDATE Student
+                    SET student_last_vote_id = LAST_INSERT_ID(), student_vote_message_id = %i
+                    WHERE student_id = %i
+                    """ % (vote_message_id, int(student['student_id']))
+                    result = self.db.execute_update_and_create_with_connection(update_student,
+                                                                               db_connection)
+
+                    print("Result of adding voting to student: ", result)
+        self.db.close_connection(db_connection)
+
+    def check(self):
+        if self.lecture.is_ended():
+            select_groups = """
+            SELECT * FROM rate_your_teacher.Group
+            """
+            groups = self.db.execute_select(select_groups)
+            for group in groups:
+                Cist.handle_current_lectures(int(group['group_id']), self.lecture.current_num,
+                                             self.handle_current_lecture)
+
+            self.lecture.next()

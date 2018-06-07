@@ -27,6 +27,7 @@ class Lecture:
         #     return True
         # else:
         #     return False
+        # TODO возможно это неправильно
         cur_time = (int(time.time()) % SEC_IN_DAY) + SHIFT_FROM_GTM
         time_after_lec = cur_time - self.time_of_lec_ending[self.current_num - 1]
         if 0 < time_after_lec < SEC_IN_15_MIN:
